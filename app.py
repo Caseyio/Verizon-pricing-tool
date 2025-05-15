@@ -25,3 +25,34 @@ with tab1:
     st.subheader("ARPU Distribution by Plan")
     fig = px.box(df, x='base_plan', y='arpu', color='segment_type', title='ARPU by Plan and Segment')
     st.plotly_chart(fig, use_container_width=True)
+
+with tab2:
+    st.header("🔄 Mix Optimization Scenario")
+    st.markdown("Adjust customer plan mix to simulate the impact on ARPU.")
+
+    # Current mix (counts of each base_plan value)
+    current_mix = df['base_plan'].value_counts(normalize=True).sort_index()
+
+    st.subheader("🔧 Simulate New Customer Mix")
+
+    col1, col2, col3 = st.columns(3)
+    basic_pct = col1.slider("Basic %", 0, 100, int(current_mix.get(0, 0) * 100))
+    plus_pct = col2.slider("Plus %", 0, 100, int(current_mix.get(1, 0) * 100))
+    premium_pct = col3.slider("Premium %", 0, 100, int(current_mix.get(2, 0) * 100))
+
+    total_pct = basic_pct + plus_pct + premium_pct
+
+    if total_pct != 100:
+        st.warning("⚠️ The total must equal 100%. Adjust the sliders.")
+    else:
+        # Calculate average ARPU per plan
+        avg_arpu = df.groupby("base_plan")["arpu"].mean().to_dict()
+
+        simulated_arpu = (
+            basic_pct / 100 * avg_arpu.get(0, 0) +
+            plus_pct / 100 * avg_arpu.get(1, 0) +
+            premium_pct / 100 * avg_arpu.get(2, 0)
+        )
+
+        st.metric(label="📈 Simulated Average ARPU", value=f"${simulated_arpu:.2f}")
+
