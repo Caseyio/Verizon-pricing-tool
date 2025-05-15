@@ -55,3 +55,18 @@ Project ARPU growth over 12 months based on adjustable pricing strategy inputs.
 
 ## 📁 File Structure
 
+
+---
+
+## 👋 About the Author
+
+**Casey Ortiz**  
+Data analyst and SaaS leader with 10+ years in public sector sales, analytics, and strategic planning.
+
+📫 [kcarlos.ortiz@gmail.com](mailto:kcarlos.ortiz@gmail.com)  
+🔗 [LinkedIn Profile](https://www.linkedin.com/in/YOUR-LINK)
+
+---
+
+
+
