@@ -1,46 +1,57 @@
 # 📊 Smart Pricing & Revenue Planner
 
-**A machine learning–powered tool for telecom pricing optimization, customer mix simulation, and ARPU forecasting.**
+An interactive Streamlit dashboard that combines machine learning, customer segmentation, and pricing simulation to support strategic revenue planning.
 
-Built as a case study to showcase applied data science and business intelligence aligned with pricing analytics roles in telecom and enterprise SaaS.
-
----
-
-## 🔍 Use Case
-
-This tool simulates a pricing analytics engine similar to what a wireless carrier like Verizon might use. It empowers analysts to:
-
-- Predict **Average Revenue Per User (ARPU)** using XGBoost
-- Identify **pricing inefficiencies** and margin erosion
-- Simulate changes to **customer mix across plan tiers**
-- Forecast **annual revenue performance** based on pricing strategy
+> ⚙️ Built as a real-world case study aligned with enterprise pricing and analytics roles — like Verizon's Pricing Analytics team.
 
 ---
 
-## 🧠 How It Works
+## 🚀 Try the App
 
-### ✅ ARPU Modeling
-A regression model (XGBoost) trained on a real telco churn dataset with simulated broadband pricing logic. It predicts ARPU based on:
-
-- Plan type
-- Promo discount
-- Segment type (Consumer, SMB, Enterprise)
-- Monthly charges
-- Churn risk score
-
-### ✅ Tabs & Features
-
-#### 💡 **Pricing Efficiency View**
-Explore current pricing by segment and plan. Identify underperforming plans and ARPU trends.
-
-#### 🔄 **Mix Optimizer**
-Adjust customer distribution across Basic, Plus, and Premium plans. See how mix shifts impact average ARPU.
-
-#### 📅 **Annual Plan Simulator** *(Coming Soon)*
-Project ARPU and revenue across 12 months using interactive sliders for pricing and customer mix.
+👉 **Live Streamlit App:** [https://your-streamlit-url.streamlit.app](#)  
+📦 **GitHub Repo:** [https://github.com/yourusername/Verizon-pricing-tool](#)
 
 ---
 
-## 📂 Project Structure
+## 🎯 Use Cases
 
+This app simulates the work of a telecom pricing analytics team by answering key questions:
+
+- What pricing tiers and customer segments are underperforming?
+- How does the customer mix affect overall ARPU?
+- How will ARPU evolve over the year if we adjust price, discount, or growth?
+
+---
+
+## 🧱 App Features
+
+### 💡 Tab 1: Pricing Efficiency View
+Explore ARPU performance by segment and plan. Identify pricing inefficiencies and underperforming combinations.
+
+- ARPU box plot by plan and segment
+- Interactive data table with monthly charge and promo data
+
+### 🔄 Tab 2: Mix Optimizer
+Adjust the customer distribution across Basic, Plus, and Premium plans to simulate the impact on average ARPU.
+
+- Sliders for customer mix (%)
+- Real-time ARPU impact metric
+
+### 📅 Tab 3: Annual Plan Simulator
+Project ARPU growth over 12 months based on adjustable pricing strategy inputs.
+
+- Sliders for base price, promo discount, customer growth rate
+- ARPU forecast chart + total annual revenue metric
+
+---
+
+## 📊 Behind the Scenes
+
+- **Dataset:** Based on real Telco customer churn data enriched with broadband pricing (FCC data)
+- **Model:** XGBoost regressor trained to predict ARPU
+- **Stack:** Streamlit, Pandas, Plotly, Scikit-learn, XGBoost
+
+---
+
+## 📁 File Structure
 
