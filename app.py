@@ -14,8 +14,8 @@ def load_model():
 model = load_model()
 
 # Sidebar controls
-def load_sample_input():
-    return pd.read_csv("sample_input.csv")  # optional
+#def load_sample_input():
+ #   return pd.read_csv("sample_input.csv")  # optional
 
 st.markdown("""
 <style>
