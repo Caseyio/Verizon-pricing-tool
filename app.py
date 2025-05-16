@@ -16,18 +16,51 @@ model = load_model()
 # 💅 Styling
 st.markdown("""
 <style>
-    .main { background-color: #f8f9fa; }
-    .block-container { padding-top: 2rem; }
-    .stTabs [data-baseweb="tab"] { font-size: 18px; font-weight: 600; }
+/* Global font and background */
+body, .main {
+    background-color: #ffffff;
+    color: #000000;
+    font-family: "Helvetica Neue", sans-serif;
+}
+
+/* Tab styling */
+.stTabs [data-baseweb="tab"] {
+    font-size: 18px;
+    font-weight: 600;
+    border-bottom: 3px solid transparent;
+}
+.stTabs [data-baseweb="tab"]:hover {
+    color: #ff0000 !important;
+}
+.stTabs [data-baseweb="tab"][aria-selected="true"] {
+    border-color: #ffef00;
+    color: #000000;
+}
+
+/* Titles and headers */
+h1, h2, h3, .stSubheader {
+    color: #ff0000;
+}
+
+/* Buttons and widgets */
+.stButton>button {
+    background-color: #ff0000;
+    color: white;
+    border-radius: 8px;
+    padding: 0.5em 1.5em;
+    border: none;
+}
+.stButton>button:hover {
+    background-color: #cc0000;
+}
+
+/* Dataframe and component container tweaks */
+.stDataFrame, .element-container {
+    border-left: 6px solid #ffef00;
+    padding-left: 0.5rem;
+}
 </style>
 """, unsafe_allow_html=True)
-
-# Title
-st.title("📡 Verizon Wireless ARPU Planning Tool")
-st.markdown("Forecast, simulate, and optimize average revenue per user across customer segments.")
-
-# Define Tabs
-tab1, tab2, tab3 = st.tabs(["Efficiency View", "Mix Simulator", "Annual Plan"])
 
 # ---------------- Tab 1: Efficiency View ----------------
 with tab1:
