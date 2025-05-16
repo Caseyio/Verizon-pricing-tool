@@ -9,7 +9,7 @@ st.set_page_config(page_title="Verizon ARPU Intelligence", layout="wide")
 # Load model
 @st.cache_resource
 def load_model():
-    return joblib.load("model_v1.0c_xgboost.pkl")
+    return joblib.load("data/model_v1.0c_xgboost.pkl")
 
 model = load_model()
 
@@ -29,7 +29,7 @@ st.title("📡 Verizon Wireless ARPU Planning Tool")
 st.markdown("Forecast, simulate, and optimize average revenue per user across customer segments.")
 
 # Load data (replace with full cleaned version if needed)
-df = pd.read_csv("data/df_encoded_v1.0c.csv")  # placeholder for df_encoded
+df = pd.read_csv("data/segment_summary.csv")  # placeholder for df_encoded
 
 # Define Tabs
 tab1, tab2, tab3 = st.tabs(["Efficiency View", "Mix Simulator", "Annual Plan"])
@@ -37,11 +37,14 @@ tab1, tab2, tab3 = st.tabs(["Efficiency View", "Mix Simulator", "Annual Plan"])
 # ---------------- Tab 1: Efficiency View ----------------
 with tab1:
     st.subheader("💡 Efficiency by Contract & Discount")
-    group_cols = ["contract", "discount_level"]
-    summary = df.groupby(group_cols).agg(
-        arpu_mean=("arpu", "mean"),
-        count=("arpu", "count")
-    ).reset_index()
+summary = pd.read_csv("data/segment_summary.csv")
+
+fig = px.bar(summary, x="contract", y="arpu_mean", color="discount_level",
+             barmode="group", title="ARPU by Contract Type and Discount Level",
+             labels={"arpu_mean": "Average ARPU", "contract": "Contract Type"})
+
+st.plotly_chart(fig, use_container_width=True)
+st.dataframe(summary, use_container_width=True)
 
     fig = px.bar(summary, x="contract", y="arpu_mean", color="discount_level",
                  barmode="group", title="ARPU by Contract Type and Discount Level",
