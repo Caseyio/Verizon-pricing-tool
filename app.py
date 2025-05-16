@@ -16,17 +16,15 @@ model = load_model()
 # Load data
 df = pd.read_csv("data/segment_summary.csv")
 
-# Sidebar filters
+# Sidebar filters (no loyalty_label)
 st.sidebar.header("🔎 Filter Segments")
 selected_contracts = st.sidebar.multiselect("Contract Type", df["contract"].unique(), default=list(df["contract"].unique()))
 selected_discounts = st.sidebar.multiselect("Discount Level", df["discount_level"].unique(), default=list(df["discount_level"].unique()))
-selected_loyalty = st.sidebar.multiselect("Loyalty Tier", df["loyalty_label"].unique(), default=list(df["loyalty_label"].unique()))
 
 # Apply filters
 filtered_df = df[
     df["contract"].isin(selected_contracts) &
-    df["discount_level"].isin(selected_discounts) &
-    df["loyalty_label"].isin(selected_loyalty)
+    df["discount_level"].isin(selected_discounts)
 ]
 
 # Tabs
