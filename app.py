@@ -21,11 +21,19 @@ summary = load_data()
 # ---------- 🎨 Styling ----------
 st.markdown("""
 <style>
-body, .main {
-    background-color: #ffffff;
-    color: #111;
+/* Override full app container */
+html, body, [data-testid="stAppViewContainer"] {
+    background-color: #ffffff !important;
+    color: #000000 !important;
     font-family: "Helvetica Neue", sans-serif;
 }
+
+/* Sidebar and widget areas */
+[data-testid="stSidebar"] {
+    background-color: #ffffff !important;
+}
+
+/* Tabs */
 .stTabs [data-baseweb="tab"] {
     font-size: 18px;
     font-weight: 600;
@@ -36,20 +44,26 @@ body, .main {
 }
 .stTabs [data-baseweb="tab"][aria-selected="true"] {
     border-color: #ffef00;
-    color: #000;
+    color: #000000 !important;
 }
-h1, h2, h3 {
-    color: #cc0000;
+
+/* Headings */
+h1, h2, h3, .stSubheader {
+    color: #cc0000 !important;
 }
-.stButton>button {
+
+/* Button styling */
+.stButton > button {
     background-color: #cc0000;
     color: white;
     border-radius: 8px;
     padding: 0.5em 1.5em;
 }
-.stButton>button:hover {
+.stButton > button:hover {
     background-color: #990000;
 }
+
+/* Dataframe visual */
 .stDataFrame, .element-container {
     border-left: 6px solid #ffef00;
     padding-left: 0.5rem;
