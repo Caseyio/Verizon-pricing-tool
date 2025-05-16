@@ -105,4 +105,3 @@ with tab3:
                   title="12-Month ARPU Projection")
     st.plotly_chart(fig, use_container_width=True)
     st.dataframe(forecast_df, use_container_width=True)
-```}
