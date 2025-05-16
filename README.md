@@ -1,72 +1,105 @@
-# 📊 Smart Pricing & Revenue Planner
+# 📊 ARPU Modeling & Segment Analysis for Verizon Wireless Pricing Strategy
 
-An interactive Streamlit dashboard that combines machine learning, customer segmentation, and pricing simulation to support strategic revenue planning.
+## 🚀 Project Goal
 
-> ⚙️ Built as a real-world case study aligned with enterprise pricing and analytics roles — like Verizon's Pricing Analytics team.
-
----
-
-## 🚀 Try the App
-
-👉 **Live Streamlit App:** [https://your-streamlit-url.streamlit.app](#)  
-📦 **GitHub Repo:** [https://github.com/yourusername/Verizon-pricing-tool](#)
+Build an explainable machine learning model to predict **Average Revenue Per User (ARPU)** using plan, pricing, and customer attributes. The project aligns with Verizon's focus on **pricing analytics, revenue growth, and strategic customer segmentation**.
 
 ---
 
-## 🎯 Use Cases
+## 🧱 Data Sources
 
-This app simulates the work of a telecom pricing analytics team by answering key questions:
+| Dataset       | Description                        |
+| ------------- | ---------------------------------- |
+| `telco_churn` | Customer-level plan + churn data   |
+| `fcc_2024`    | Broadband plan-level pricing (FCC) |
+| `fcc_2025`    | Broadband plan-level pricing (FCC) |
 
-- What pricing tiers and customer segments are underperforming?
-- How does the customer mix affect overall ARPU?
-- How will ARPU evolve over the year if we adjust price, discount, or growth?
-
----
-
-## 🧱 App Features
-
-### 💡 Tab 1: Pricing Efficiency View
-Explore ARPU performance by segment and plan. Identify pricing inefficiencies and underperforming combinations.
-
-- ARPU box plot by plan and segment
-- Interactive data table with monthly charge and promo data
-
-### 🔄 Tab 2: Mix Optimizer
-Adjust the customer distribution across Basic, Plus, and Premium plans to simulate the impact on average ARPU.
-
-- Sliders for customer mix (%)
-- Real-time ARPU impact metric
-
-### 📅 Tab 3: Annual Plan Simulator
-Project ARPU growth over 12 months based on adjustable pricing strategy inputs.
-
-- Sliders for base price, promo discount, customer growth rate
-- ARPU forecast chart + total annual revenue metric
+Data was merged and enriched using normalized `service_type` to append external monthly and total charges.
 
 ---
 
-## 📊 Behind the Scenes
+## 🧪 Feature Engineering
 
-- **Dataset:** Based on real Telco customer churn data enriched with broadband pricing (FCC data)
-- **Model:** XGBoost regressor trained to predict ARPU
-- **Stack:** Streamlit, Pandas, Plotly, Scikit-learn, XGBoost
+* **ARPU** calculated using enriched FCC pricing
+* Derived Features:
 
----
-
-## 📁 File Structure
-
-
----
-
-## 👋 About the Author
-
-**Casey Ortiz**  
-Data analyst and SaaS leader with 10+ years in public sector sales, analytics, and strategic planning.
-
-📫 [kcarlos.ortiz@gmail.com](mailto:kcarlos.ortiz@gmail.com)  
-🔗 [LinkedIn Profile](https://www.linkedin.com/in/YOUR-LINK)
+  * `loyalty_tier` from `tenure`
+  * `discount_level` from `promo_discount`
+  * Encoded `contract`, `churn`, and `service_type`
+* Merged and validated for modeling
 
 ---
 
+## 🤓 Model Leaderboard (Top Versions)
 
+| Version | Model         | RMSE  | Notes                                |
+| ------- | ------------- | ----- | ------------------------------------ |
+| v1.3    | Random Forest | 47.04 | Raw + engineered features (no churn) |
+| v1.4    | Random Forest | 47.40 | Added real churn feature (0/1)       |
+| v1.0    | XGBoost       | 51.94 | Baseline with raw features           |
 
+📉 **Best performer**: `v1.3 Random Forest` for accuracy + explainability.
+
+---
+
+## 🔍 Feature Importance (v1.4 Random Forest)
+
+| Rank | Feature                                      | Importance       |
+| ---- | -------------------------------------------- | ---------------- |
+| 1    | `monthlycharges`                             | Strongest driver |
+| 2    | `tenure`                                     | Loyalty signal   |
+| 3    | `promo_discount`                             | Promotional lift |
+| 4    | `service_type`                               | Technology type  |
+| 5    | `churn`                                      | Low signal       |
+| 6+   | `contract`, `loyalty_tier`, `discount_level` | Supporting roles |
+
+> 📈 Insight: Churn was *not* a strong predictor of ARPU. Revenue is driven more by pricing and plan structure.
+
+---
+
+## 🛠️ Segment-Level Analysis
+
+### Top ARPU Segments (Contract × Loyalty Tier)
+
+* **One-year, low-discount** customers are top performers
+* **Month-to-month, low-discount** surprisingly competitive
+* Loyalty alone doesn't guarantee ARPU — **price discipline matters**
+
+### Discount Erosion
+
+* Across all contracts, **high discounts reduce ARPU**
+* Most efficient ARPU achieved in **low to medium discount tiers**
+
+### Churn vs ARPU
+
+* No strong correlation between high-ARPU segments and churn
+* **ARPU-focused modeling** is appropriate for revenue planning
+
+---
+
+## 💼 Deliverables
+
+* [x] Cleaned and enriched dataset
+* [x] Version-controlled models + leaderboard
+* [x] Segment visualizations (ARPU + churn)
+* [x] Streamlit-ready pipeline (v1.3 model)
+* [x] Markdown report for GitHub
+
+---
+
+## 🚩 Final Recommendation: Move Forward
+
+* **Modeling has plateaued**: Performance has stabilized across techniques
+* **Random Forest v1.3** is optimal for deployment
+* **Insights are robust** for pricing, promotion, and portfolio planning
+
+### 🏆 Next Steps
+
+* Deploy v1.3 in a Streamlit app
+* Share findings on GitHub + LinkedIn
+* Consider building a separate **churn classifier** if targeting retention
+
+---
+
+> Built by Casey Ortiz | Data Analyst & SaaS Sales Leader
+> [GitHub Repo](https://github.com/) | [LinkedIn](https://linkedin.com/in/...)
