@@ -1,12 +1,12 @@
-# 📊 ARPU Modeling & Segment Analysis for Verizon Wireless Pricing Strategy
+# 🚀 ARPU Modeling & Segment Analysis for Verizon Wireless Pricing Strategy
 
-## 🚀 Project Goal
+## 🧠 Project Goal
 
 Build an explainable machine learning model to predict **Average Revenue Per User (ARPU)** using plan, pricing, and customer attributes. The project aligns with Verizon's focus on **pricing analytics, revenue growth, and strategic customer segmentation**.
 
 ---
 
-## 🧱 Data Sources
+## 💾 Data Sources
 
 | Dataset       | Description                        |
 | ------------- | ---------------------------------- |
@@ -30,7 +30,7 @@ Data was merged and enriched using normalized `service_type` to append external 
 
 ---
 
-## 🤓 Model Leaderboard (Top Versions)
+## 📈 Model Leaderboard (Top Versions)
 
 | Version | Model         | RMSE  | Notes                                |
 | ------- | ------------- | ----- | ------------------------------------ |
@@ -38,7 +38,7 @@ Data was merged and enriched using normalized `service_type` to append external 
 | v1.4    | Random Forest | 47.40 | Added real churn feature (0/1)       |
 | v1.0    | XGBoost       | 51.94 | Baseline with raw features           |
 
-📉 **Best performer**: `v1.3 Random Forest` for accuracy + explainability.
+🥇 **Best performer**: `v1.3 Random Forest` for accuracy + explainability.
 
 ---
 
@@ -53,11 +53,11 @@ Data was merged and enriched using normalized `service_type` to append external 
 | 5    | `churn`                                      | Low signal       |
 | 6+   | `contract`, `loyalty_tier`, `discount_level` | Supporting roles |
 
-> 📈 Insight: Churn was *not* a strong predictor of ARPU. Revenue is driven more by pricing and plan structure.
+>  Insight: Churn was *not* a strong predictor of ARPU. Revenue is driven more by pricing and plan structure.
 
 ---
 
-## 🛠️ Segment-Level Analysis
+## 🧬 Segment-Level Analysis
 
 ### Top ARPU Segments (Contract × Loyalty Tier)
 
@@ -101,5 +101,5 @@ Data was merged and enriched using normalized `service_type` to append external 
 
 ---
 
-> Built by Casey Ortiz | Data Analyst & SaaS Sales Leader
-> [GitHub Repo](https://github.com/) | [LinkedIn](https://linkedin.com/in/...)
+> Built by Casey Ortiz | Data Analyst & Ops Strategy Leader
+> [GitHub Repo](https://github.com/caeyio) | [LinkedIn](https://linkedin.com/in/kco1)
