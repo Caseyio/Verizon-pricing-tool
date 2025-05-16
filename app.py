@@ -1,6 +1,6 @@
 # 📊 Verizon Wireless ARPU Intelligence Tool
 
-Forecast, simulate, and optimize revenue performance by segment.
+st.markdown("Forecast, simulate, and optimize revenue performance by segment.")
 
 ```python
 import streamlit as st
