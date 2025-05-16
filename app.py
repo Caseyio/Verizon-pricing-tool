@@ -63,8 +63,11 @@ h1, h2, h3, .stSubheader {
 """, unsafe_allow_html=True)
 
 # ---------------- Tab 1: Efficiency View ----------------
+# Define Tabs FIRST
+tab1, tab2, tab3 = st.tabs(["Efficiency View", "Mix Simulator", "Annual Plan"])
+
 with tab1:
-    st.subheader("💡 Efficiency by Contract & Discount")
+    st.subheader("Efficiency by Contract & Discount")
     summary = pd.read_csv("data/segment_summary.csv")
 
     fig = px.bar(summary, x="contract", y="arpu_mean", color="discount_level",
