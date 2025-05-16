@@ -34,7 +34,9 @@ tab1, tab2, tab3 = st.tabs(["Efficiency View", "Mix Simulator", "Annual Plan"])
 
 # ---------------- Tab 1 ----------------
 with tab1:
-    st.subheader("📊 Efficiency by Contract & Discount")
+    st.title("📊 Verizon Wireless ARPU Intelligence Tool")
+    st.markdown("Forecast, simulate, and optimize revenue performance by segment.")
+    st.subheader("📈 Efficiency by Contract & Discount")
 
     fig = px.bar(filtered_df, x="contract", y="arpu_mean", color="discount_level",
                  barmode="group", title="ARPU by Contract Type and Discount Level",
@@ -68,11 +70,13 @@ with tab2:
         f"discount_level_{mix_discount}": [1]
     })
 
+    # Fill in missing columns
     for col in model.feature_names_in_:
         if col not in input_df.columns:
             input_df[col] = 0
     input_df = input_df[model.feature_names_in_]
 
+    # Predict ARPU
     pred_arpu = model.predict(input_df)[0]
     st.metric("📈 Projected ARPU", f"${pred_arpu:.2f}")
 
