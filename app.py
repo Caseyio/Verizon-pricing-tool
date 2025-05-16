@@ -29,7 +29,7 @@ st.title("📡 Verizon Wireless ARPU Planning Tool")
 st.markdown("Forecast, simulate, and optimize average revenue per user across customer segments.")
 
 # Load data (replace with full cleaned version if needed)
-df = pd.read_csv("df_encoded_v1.0c.csv")  # placeholder for df_encoded
+df = pd.read_csv("data/df_encoded_v1.0c.csv")  # placeholder for df_encoded
 
 # Define Tabs
 tab1, tab2, tab3 = st.tabs(["Efficiency View", "Mix Simulator", "Annual Plan"])
