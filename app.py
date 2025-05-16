@@ -2,7 +2,6 @@
 
 st.markdown("Forecast, simulate, and optimize revenue performance by segment.")
 
-```python
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -102,4 +101,3 @@ with tab3:
                   title="12-Month ARPU Projection")
     st.plotly_chart(fig, use_container_width=True)
     st.dataframe(forecast_df, use_container_width=True)
-```
