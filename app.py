@@ -6,37 +6,37 @@ import plotly.express as px
 
 st.set_page_config(page_title="Verizon ARPU Intelligence", layout="wide")
 
-# Load model
+# Load model and data
 @st.cache_resource
 def load_model():
     return joblib.load("data/model_v1.0c_xgboost.pkl")
 
-model = load_model()
+@st.cache_data
+def load_segment_data():
+    return pd.read_csv("data/segment_summary.csv")
 
-# 💅 Styling - Verizon-themed + visible tabs + clean layout
+model = load_model()
+df = load_segment_data()
+
+# 💅 Styling
 st.markdown("""
 <style>
-html, body, [data-testid="stAppViewContainer"] {
+body, .main {
     background-color: #ffffff;
     color: #000000;
     font-family: "Helvetica Neue", sans-serif;
 }
-[data-testid="stSidebar"] {
-    background-color: #ffffff;
-}
 .stTabs [data-baseweb="tab"] {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 600;
-    color: #000000 !important;
-    padding: 10px 16px;
+    border-bottom: 3px solid transparent;
 }
 .stTabs [data-baseweb="tab"]:hover {
-    background-color: #ffef00;
+    color: #ff0000 !important;
 }
 .stTabs [data-baseweb="tab"][aria-selected="true"] {
-    background-color: #fff0f0;
-    border-bottom: 3px solid #ff0000;
-    color: #000000 !important;
+    border-color: #ffef00;
+    color: #000000;
 }
 h1, h2, h3, .stSubheader {
     color: #ff0000;
@@ -58,23 +58,24 @@ h1, h2, h3, .stSubheader {
 </style>
 """, unsafe_allow_html=True)
 
+# Page Title
 st.title("📶 Verizon Wireless ARPU Intelligence Tool")
 st.markdown("Forecast, simulate, and optimize revenue performance by segment.")
 
-# Define Tabs FIRST
+# Tabs
 tab1, tab2, tab3 = st.tabs(["Efficiency View", "Mix Simulator", "Annual Plan"])
 
 # ---------------- Tab 1: Efficiency View ----------------
 with tab1:
-    st.subheader("Efficiency by Contract & Discount")
-    summary = pd.read_csv("data/segment_summary.csv")
+    st.subheader("📊 Efficiency by Contract & Discount")
+    selected_contracts = st.sidebar.multiselect("Filter by Contract Type", options=df["contract"].unique(), default=list(df["contract"].unique()))
+    filtered_df = df[df["contract"].isin(selected_contracts)]
 
-    fig = px.bar(summary, x="contract", y="arpu_mean", color="discount_level",
+    fig = px.bar(filtered_df, x="contract", y="arpu_mean", color="discount_level",
                  barmode="group", title="ARPU by Contract Type and Discount Level",
-                 labels={"arpu_mean": "Average ARPU", "contract": "Contract Type"},
-                 template="plotly_white")
+                 labels={"arpu_mean": "Average ARPU", "contract": "Contract Type"})
     st.plotly_chart(fig, use_container_width=True)
-    st.dataframe(summary, use_container_width=True)
+    st.dataframe(filtered_df, use_container_width=True)
 
 # ---------------- Tab 2: Mix Simulator ----------------
 with tab2:
@@ -111,7 +112,7 @@ with tab2:
 
 # ---------------- Tab 3: Annual Price Planner ----------------
 with tab3:
-    st.subheader("📅 ARPU Forecast Planner")
+    st.subheader("🗕️ ARPU Forecast Planner")
     st.markdown("Model monthly ARPU growth and churn for planning.")
 
     base_arpu = st.slider("Base ARPU", 20.0, 120.0, 75.0, step=1.0)
@@ -127,6 +128,6 @@ with tab3:
 
     forecast_df = pd.DataFrame({"Month": months, "Projected ARPU": forecast})
     fig = px.line(forecast_df, x="Month", y="Projected ARPU", markers=True,
-                  title="12-Month ARPU Projection", template="plotly_white")
+                  title="12-Month ARPU Projection")
     st.plotly_chart(fig, use_container_width=True)
     st.dataframe(forecast_df, use_container_width=True)
