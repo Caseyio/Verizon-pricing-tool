@@ -6,24 +6,26 @@ import plotly.express as px
 
 st.set_page_config(page_title="Verizon ARPU Intelligence", layout="wide")
 
-# Load model
+# Load model and segment summary
 @st.cache_resource
 def load_model():
     return joblib.load("data/model_v1.0c_xgboost.pkl")
 
-model = load_model()
+@st.cache_data
+def load_data():
+    return pd.read_csv("data/segment_summary.csv")
 
-# 💅 Styling
+model = load_model()
+summary = load_data()
+
+# ---------- 🎨 Styling ----------
 st.markdown("""
 <style>
-/* Global font and background */
 body, .main {
     background-color: #ffffff;
-    color: #000000;
+    color: #111;
     font-family: "Helvetica Neue", sans-serif;
 }
-
-/* Tab styling */
 .stTabs [data-baseweb="tab"] {
     font-size: 18px;
     font-weight: 600;
@@ -34,27 +36,20 @@ body, .main {
 }
 .stTabs [data-baseweb="tab"][aria-selected="true"] {
     border-color: #ffef00;
-    color: #000000;
+    color: #000;
 }
-
-/* Titles and headers */
-h1, h2, h3, .stSubheader {
-    color: #ff0000;
+h1, h2, h3 {
+    color: #cc0000;
 }
-
-/* Buttons and widgets */
 .stButton>button {
-    background-color: #ff0000;
+    background-color: #cc0000;
     color: white;
     border-radius: 8px;
     padding: 0.5em 1.5em;
-    border: none;
 }
 .stButton>button:hover {
-    background-color: #cc0000;
+    background-color: #990000;
 }
-
-/* Dataframe and component container tweaks */
 .stDataFrame, .element-container {
     border-left: 6px solid #ffef00;
     padding-left: 0.5rem;
@@ -62,35 +57,50 @@ h1, h2, h3, .stSubheader {
 </style>
 """, unsafe_allow_html=True)
 
-# ---------------- Tab 1: Efficiency View ----------------
-# Define Tabs FIRST
+# ---------- 🎯 App Title ----------
+st.title("📡 Verizon Wireless ARPU Intelligence Tool")
+st.markdown("Forecast, simulate, and optimize revenue performance by segment.")
+
+# ---------- 🗂 Tabs ----------
 tab1, tab2, tab3 = st.tabs(["Efficiency View", "Mix Simulator", "Annual Plan"])
 
+# ---------- 📊 Tab 1: Efficiency View ----------
 with tab1:
-    st.subheader("Efficiency by Contract & Discount")
-    summary = pd.read_csv("data/segment_summary.csv")
+    st.subheader("💡 Efficiency by Contract & Discount")
+
+    col1, col2 = st.columns(2)
+    selected_contract = col1.selectbox("Select Contract Type", sorted(summary["contract"].unique()))
+    selected_discount = col2.selectbox("Select Discount Level", sorted(summary["discount_level"].unique()))
+
+    filtered = summary[
+        (summary["contract"] == selected_contract) &
+        (summary["discount_level"] == selected_discount)
+    ]
+
+    st.markdown(f"#### ARPU Snapshot: `{selected_contract}` with `{selected_discount}` discount")
+    st.dataframe(filtered, use_container_width=True)
 
     fig = px.bar(summary, x="contract", y="arpu_mean", color="discount_level",
                  barmode="group", title="ARPU by Contract Type and Discount Level",
                  labels={"arpu_mean": "Average ARPU", "contract": "Contract Type"})
     st.plotly_chart(fig, use_container_width=True)
-    st.dataframe(summary, use_container_width=True)
 
-# ---------------- Tab 2: Mix Simulator ----------------
+# ---------- ⚙️ Tab 2: Mix Simulator ----------
 with tab2:
     st.subheader("🎛️ Mix Optimization Simulator")
-    st.markdown("Adjust segment mix to estimate revenue impact.")
+    st.markdown("Adjust segment traits to simulate ARPU outcome.")
 
     col1, col2, col3 = st.columns(3)
-    mix_contract = col1.selectbox("Contract Type", ["Month-to-month", "One year", "Two year"])
+    mix_contract = col1.selectbox("Contract", ["Month-to-month", "One year", "Two year"])
     mix_loyalty = col2.selectbox("Loyalty Tier", ["New", "Established", "Loyal", "Very Loyal"])
     mix_discount = col3.selectbox("Discount Level", ["Low", "Medium", "High"])
 
-    mix_tenure = st.slider("Customer Tenure (months)", 1, 72, 24)
-    senior = st.checkbox("Senior Citizen", value=False)
-    service_type = st.selectbox("Service Type", ["fiber", "dsl", "none"])
+    col4, col5 = st.columns([2, 1])
+    mix_tenure = col4.slider("Customer Tenure (months)", 1, 72, 24)
+    senior = col5.checkbox("Senior Citizen", value=False)
+    service_type = st.radio("Service Type", ["fiber", "dsl", "none"], horizontal=True)
 
-    # Prepare input row
+    # Prepare input
     input_df = pd.DataFrame({
         "tenure": [mix_tenure],
         "seniorcitizen": [int(senior)],
@@ -102,31 +112,30 @@ with tab2:
         f"discount_level_{mix_discount}": [1]
     })
 
-    # Fill in missing columns
     for col in model.feature_names_in_:
         if col not in input_df.columns:
             input_df[col] = 0
     input_df = input_df[model.feature_names_in_]
 
-    # Predict
     pred_arpu = model.predict(input_df)[0]
     st.metric("📈 Projected ARPU", f"${pred_arpu:.2f}")
 
-# ---------------- Tab 3: Annual Price Planner ----------------
+# ---------- 📅 Tab 3: Annual Plan ----------
 with tab3:
     st.subheader("📅 ARPU Forecast Planner")
-    base_arpu = st.slider("Base ARPU", 20.0, 120.0, 75.0, step=1.0)
-    churn_rate = st.slider("Monthly Churn Rate (%)", 0.0, 10.0, 1.5, step=0.1) / 100
-    growth_rate = st.slider("Monthly Growth Rate (%)", 0.0, 10.0, 2.0, step=0.1) / 100
+    st.markdown("Model monthly ARPU growth and churn for planning.")
 
-    months = list(range(1, 13))
+    base_arpu = st.slider("Base ARPU", 20.0, 120.0, 75.0)
+    churn_rate = st.slider("Monthly Churn Rate (%)", 0.0, 10.0, 1.5) / 100
+    growth_rate = st.slider("Monthly Growth Rate (%)", 0.0, 10.0, 2.0) / 100
+
     forecast = []
-    current_arpu = base_arpu
-    for _ in months:
-        current_arpu *= (1 - churn_rate + growth_rate)
-        forecast.append(current_arpu)
+    current = base_arpu
+    for _ in range(12):
+        current *= (1 - churn_rate + growth_rate)
+        forecast.append(current)
 
-    forecast_df = pd.DataFrame({"Month": months, "Projected ARPU": forecast})
+    forecast_df = pd.DataFrame({"Month": range(1, 13), "Projected ARPU": forecast})
     fig = px.line(forecast_df, x="Month", y="Projected ARPU", markers=True,
                   title="12-Month ARPU Projection")
     st.plotly_chart(fig, use_container_width=True)
