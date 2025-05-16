@@ -13,10 +13,7 @@ def load_model():
 
 model = load_model()
 
-# Sidebar controls
-#def load_sample_input():
- #   return pd.read_csv("sample_input.csv")  # optional
-
+# 💅 Styling
 st.markdown("""
 <style>
     .main { background-color: #f8f9fa; }
@@ -25,11 +22,9 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# Title
 st.title("📡 Verizon Wireless ARPU Planning Tool")
 st.markdown("Forecast, simulate, and optimize average revenue per user across customer segments.")
-
-# Load data (replace with full cleaned version if needed)
-df = pd.read_csv("data/segment_summary.csv")  # placeholder for df_encoded
 
 # Define Tabs
 tab1, tab2, tab3 = st.tabs(["Efficiency View", "Mix Simulator", "Annual Plan"])
@@ -37,20 +32,12 @@ tab1, tab2, tab3 = st.tabs(["Efficiency View", "Mix Simulator", "Annual Plan"])
 # ---------------- Tab 1: Efficiency View ----------------
 with tab1:
     st.subheader("💡 Efficiency by Contract & Discount")
-summary = pd.read_csv("data/segment_summary.csv")
-
-fig = px.bar(summary, x="contract", y="arpu_mean", color="discount_level",
-             barmode="group", title="ARPU by Contract Type and Discount Level",
-             labels={"arpu_mean": "Average ARPU", "contract": "Contract Type"})
-
-st.plotly_chart(fig, use_container_width=True)
-st.dataframe(summary, use_container_width=True)
+    summary = pd.read_csv("data/segment_summary.csv")
 
     fig = px.bar(summary, x="contract", y="arpu_mean", color="discount_level",
                  barmode="group", title="ARPU by Contract Type and Discount Level",
                  labels={"arpu_mean": "Average ARPU", "contract": "Contract Type"})
     st.plotly_chart(fig, use_container_width=True)
-
     st.dataframe(summary, use_container_width=True)
 
 # ---------------- Tab 2: Mix Simulator ----------------
@@ -79,7 +66,7 @@ with tab2:
         f"discount_level_{mix_discount}": [1]
     })
 
-    # Add missing dummies with 0s
+    # Fill in missing columns
     for col in model.feature_names_in_:
         if col not in input_df.columns:
             input_df[col] = 0
