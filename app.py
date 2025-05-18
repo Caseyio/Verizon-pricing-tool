@@ -17,7 +17,7 @@ model = load_model()
 df = pd.read_csv("data/segment_summary.csv")
 
 # Sidebar filters (no loyalty_label)
-st.sidebar.header("🔎 Filter Segments")
+st.sidebar.header("Filter Segments")
 selected_contracts = st.sidebar.multiselect("Contract Type", df["contract"].unique(), default=list(df["contract"].unique()))
 selected_discounts = st.sidebar.multiselect("Discount Level", df["discount_level"].unique(), default=list(df["discount_level"].unique()))
 
@@ -32,9 +32,9 @@ tab1, tab2, tab3 = st.tabs(["Efficiency View", "Mix Simulator", "Annual Plan"])
 
 # ---------------- Tab 1 ----------------
 with tab1:
-    st.title("📊 Verizon Wireless ARPU Intelligence Tool")
+    st.title("Verizon Wireless ARPU Intelligence Tool")
     st.markdown("Forecast, simulate, and optimize revenue performance by segment.")
-    st.subheader("📈 Efficiency by Contract & Discount")
+    st.subheader("Efficiency by Contract & Discount")
 
     fig = px.bar(filtered_df, x="contract", y="arpu_mean", color="discount_level",
                  barmode="group", title="ARPU by Contract Type and Discount Level",
@@ -44,7 +44,7 @@ with tab1:
 
 # ---------------- Tab 2 ----------------
 with tab2:
-    st.subheader("🎛️ Mix Optimization Simulator")
+    st.subheader("Mix Optimization Simulator")
     st.markdown("Adjust segment mix to estimate revenue impact.")
 
     col1, col2, col3 = st.columns(3)
@@ -76,11 +76,11 @@ with tab2:
 
     # Predict ARPU
     pred_arpu = model.predict(input_df)[0]
-    st.metric("📈 Projected ARPU", f"${pred_arpu:.2f}")
+    st.metric("Projected ARPU", f"${pred_arpu:.2f}")
 
 # ---------------- Tab 3 ----------------
 with tab3:
-    st.subheader("📅 ARPU Forecast Planner")
+    st.subheader("ARPU Forecast Planner")
     st.markdown("Model monthly ARPU growth and churn for planning.")
 
     base_arpu = st.slider("Base ARPU", 20.0, 120.0, 75.0, step=1.0)
